@@ -1,8 +1,13 @@
 package com.cheng.androidart;
 
 import android.app.Activity;
+import android.app.Application;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 
 /**
  * Created by 李国财 on 2017-12-25.
@@ -11,10 +16,27 @@ import android.util.Log;
 public class SecondActivity extends Activity {
     private final static String TAG = SecondActivity.class.getCanonicalName();
     private final static String TAG_CHENG = "daxian";
+
+    private Button mButton;
+    private TextView mTv;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        mButton = findViewById(R.id.button);
+        mTv = findViewById(R.id.textView);
+        final Intent intent = new Intent(this,MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.putExtra("testKey",8);
+
+        mButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(intent);
+            }
+        });
+
+        mTv.setText(""+getTaskId()+this);
         Log.i(TAG_CHENG,TAG+"onCreate");
     }
 
@@ -52,5 +74,12 @@ public class SecondActivity extends Activity {
     protected void onDestroy() {
         super.onDestroy();
         Log.i(TAG_CHENG,TAG+"onDestroy");
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+
+        Log.i(TAG_CHENG,TAG+"onNewIntent"+intent.getIntExtra("testKey",0));
     }
 }

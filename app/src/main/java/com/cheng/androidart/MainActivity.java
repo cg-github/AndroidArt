@@ -1,11 +1,13 @@
 package com.cheng.androidart;
 
 import android.content.Intent;
+import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -13,12 +15,14 @@ public class MainActivity extends AppCompatActivity {
     private final static String TAG_CHENG = "daxian";
 
     private Button mButton;
+    private TextView mTv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mButton = findViewById(R.id.button);
+        mTv = findViewById(R.id.textView);
         final Intent intent = new Intent(MainActivity.this,SecondActivity.class);
 
         mButton.setOnClickListener(new View.OnClickListener() {
@@ -27,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        mTv.setText(""+getTaskId()+this);
         Log.i(TAG_CHENG,TAG+"onCreate");
     }
 
@@ -64,5 +69,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         Log.i(TAG_CHENG,TAG+"onDestroy");
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
+        Log.i(TAG_CHENG,TAG+"onSaveInstanceState");
+        super.onSaveInstanceState(outState, outPersistentState);
     }
 }
