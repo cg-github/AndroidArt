@@ -26,7 +26,6 @@ public class SecondActivity extends Activity {
         mButton = findViewById(R.id.button);
         mTv = findViewById(R.id.textView);
         final Intent intent = new Intent(this,MainActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.putExtra("testKey",8);
 
         mButton.setOnClickListener(new View.OnClickListener() {

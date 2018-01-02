@@ -1,13 +1,26 @@
 package com.cheng.androidart;
 
+import android.app.Service;
+import android.content.ComponentName;
 import android.content.Intent;
+import android.content.ServiceConnection;
+import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.IBinder;
 import android.os.PersistableBundle;
+import android.os.RemoteException;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.cheng.androidart.aidl.Book;
+import com.cheng.androidart.aidl.IBookManager;
+
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -16,6 +29,21 @@ public class MainActivity extends AppCompatActivity {
 
     private Button mButton;
     private TextView mTv;
+    private IBookManager mBookManager;
+    private ServiceConnection mServiceConn = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
+            Log.i(TAG_CHENG,TAG+"onServiceConnected");
+            mBookManager = IBookManager.Stub.asInterface(iBinder);
+            Toast.makeText(getBaseContext(),"Bind service success!",Toast.LENGTH_LONG).show();
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName componentName) {
+            Log.i(TAG_CHENG,TAG+"onServiceDisconnected");
+        }
+    };
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,12 +51,23 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         mButton = findViewById(R.id.button);
         mTv = findViewById(R.id.textView);
-        final Intent intent = new Intent(MainActivity.this,SecondActivity.class);
-
+        final Intent intent = new Intent("com.cheng.aidlservice.BookManagerService");
+        bindService(intent,mServiceConn, Service.BIND_AUTO_CREATE);
         mButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(intent);
+                try {
+                    List<Book> books = mBookManager.getBookList();
+                    Log.i(TAG_CHENG,TAG+books);
+                    Book book = new Book("Ring of the King!",78);
+                    book = mBookManager.addBook(book);
+                    Log.i(TAG_CHENG,TAG+book);
+                    books = mBookManager.getBookList();
+                    Log.i(TAG_CHENG,TAG+books);
+
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
             }
         });
         mTv.setText(""+getTaskId()+this);
