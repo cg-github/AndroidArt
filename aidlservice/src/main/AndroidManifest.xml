@@ -14,5 +14,17 @@
                 <category android:name="android.intent.category.DEFAULT"></category>
             </intent-filter>
         </service>
+        <service android:name=".AddTestService">
+            <intent-filter>
+                <action android:name="com.cheng.aidlservice.AddTestService"></action>
+                <category android:name="android.intent.category.DEFAULT"></category>
+            </intent-filter>
+        </service>
+        <service android:name=".messager.MessagerTestService">
+            <intent-filter>
+                <action android:name="com.cheng.aidlservice.messager.MessagerTestService"></action>
+                <category android:name="android.intent.category.DEFAULT"></category>
+            </intent-filter>
+        </service>
     </application>
 </manifest>
