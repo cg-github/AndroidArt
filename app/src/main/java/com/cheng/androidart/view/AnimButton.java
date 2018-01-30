@@ -7,6 +7,8 @@ import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Scroller;
 
@@ -24,6 +26,10 @@ public class AnimButton extends android.support.v7.widget.AppCompatButton {
     private int mLastX;
     private int mLastY;
     private Scroller mScroller;
+
+
+
+
 
 
 
@@ -53,23 +59,43 @@ public class AnimButton extends android.support.v7.widget.AppCompatButton {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+        Log.i(TAG,TAG_CHENG+"onTouchEvent");
         int x = (int) event.getRawX();
         int y = (int) event.getRawY();
         switch (event.getAction()){
+            case MotionEvent.ACTION_DOWN:
+                Log.i(TAG,TAG_CHENG+"action down!!!!!");
+//                return false;
+                break;
             case MotionEvent.ACTION_MOVE:
                 int deltaX = x-mLastX;
                 int deltaY = y-mLastY;
                 Log.i(TAG_CHENG,TAG+" x:"+x+" y:"+y+" mLastX:"+mLastX
                         +" mLastY:"+mLastY+" deltaX:"+deltaX+" deltaY:"+deltaY);
-                ObjectAnimator.ofFloat(this,"translationX",0,deltaX).setDuration(100).start();
-                ObjectAnimator.ofFloat(this,"translationY",deltaY,0).setDuration(100).start();
+//                ObjectAnimator.ofFloat(this,"translationX",0,deltaX).setDuration(100).start();
+ //               ObjectAnimator.ofFloat(this,"translationY",deltaY,0).setDuration(100).start();
+                ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) getLayoutParams();
+                params.leftMargin+=deltaX;
+                params.topMargin+=deltaY;
+                requestLayout();
+                return false;
+//                break;
+            case MotionEvent.ACTION_UP:
+                Log.i(TAG,TAG_CHENG+"action UP!!!!!");
+                Log.i(TAG,TAG_CHENG+"Left:"+getLeft()+"  Top:"+getTop());
                 break;
-
         }
         mLastX = x;
         mLastY = y;
-        return true;
+        return super.onTouchEvent(event);
     }
+
+
+//    @Override
+//    public boolean onTouchEvent(MotionEvent event) {
+//        Log.i(TAG,TAG_CHENG+"onTouchEvent");
+//        return super.onTouchEvent(event);
+//    }
 
     @Override
     public void computeScroll() {
@@ -88,7 +114,5 @@ public class AnimButton extends android.support.v7.widget.AppCompatButton {
         mScroller.startScroll(scrollX,scrollY,deltaX,deltaY,1000);
         invalidate();
     }
-
-
 
 }

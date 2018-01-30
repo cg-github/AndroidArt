@@ -18,7 +18,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".SecondActivity">
+        <activity android:name=".SecondActivity"
+            android:process=":remote">
             <intent-filter>
                 <action android:name="cheng" />
                 <category android:name="gtatest"/>
@@ -27,6 +28,19 @@
 
             </intent-filter>
         </activity>
+        <activity android:name=".ThirdActivity">
+
+        </activity>
+        <receiver android:name=".MyAppWidgetProvider">
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/appwidget_provider_info">
+            </meta-data>
+            <intent-filter>
+                <action android:name="com.cheng.androidart.action.CLICK"/>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>
